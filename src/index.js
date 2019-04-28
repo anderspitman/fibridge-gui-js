@@ -37,8 +37,8 @@ const FileAdder = () => {
   return {
     view: (vnote) => {
       return m('.file-adder.pure-u-1',
-        m('h1', "Add some files"),
         m(FileList, { files: State.files }),
+        m('h1', "Add more files"),
         m('input', {
             type: 'file',
             onchange: (e) => {
@@ -86,8 +86,29 @@ const File = () => {
       const url = vnode.attrs.data.url;
 
       return m('.file',
-        m('a', { target: '_blank', href: url }, url)
+        m('a', { target: '_blank', href: url }, url),
+        m(QRCodeView, { url }),
       );
+    },
+  };
+};
+
+const QRCodeView = () => {
+  return {
+    oncreate: (vnode) => {
+      const el = document.createElement('div');
+      new QRCode(el, {
+        text: vnode.attrs.url,
+        width: 150,
+        height: 150
+      });
+      vnode.dom.appendChild(el);
+    },
+    onbeforeupdate: () => {
+      return false;
+    },
+    view: (vnode) => {
+      return m('.qr-code');
     },
   };
 };
