@@ -10,8 +10,10 @@ const State = {
     const port = window.location.port !== "" ?
       parseInt(window.location.port, 10) :
       80;
+
+    const secure = window.location.protocol === 'https:';
     
-    createHoster({ proxyAddress, port, secure: false }).then((hoster) => {
+    createHoster({ proxyAddress, port, secure }).then((hoster) => {
       State.hoster = hoster;
       m.redraw();
     });
