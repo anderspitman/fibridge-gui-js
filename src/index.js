@@ -7,12 +7,15 @@ const State = {
   init() {
 
     const proxyAddress = window.location.hostname;
-    const port = window.location.port !== "" ?
-      parseInt(window.location.port, 10) :
-      80;
 
     const secure = window.location.protocol === 'https:';
-    
+
+    const defaultPort = secure ? 443 : 80;
+
+    const port = window.location.port !== "" ?
+      parseInt(window.location.port, 10) :
+      defaultPort;
+
     createHoster({ proxyAddress, port, secure }).then((hoster) => {
       State.hoster = hoster;
       m.redraw();
@@ -55,8 +58,8 @@ const FileAdder = () => {
               State.hoster.hostFile({ path, file });
               const fullPath = State.hoster.getHostedPath(path);
               const portStr = State.hoster.getPortStr();
-              //const url = `${window.location.protocol}//${proxyAddress}${portStr}${fullPath}`;
-              const url = `${proxyAddress}${portStr}${fullPath}`;
+              const url = `${window.location.protocol}//${proxyAddress}${portStr}${fullPath}`;
+              //const url = `${proxyAddress}${portStr}${fullPath}`;
 
               const fileEntry = {
                 url,
@@ -91,7 +94,7 @@ const File = () => {
       const url = vnode.attrs.data.url;
 
       return m('.file',
-        m('a', { target: '_blank', href: `${window.location.protocol}//${url}` }, url),
+        m('a', { target: '_blank', href: `${url}` }, url),
         m(QRCodeView, { url }),
       );
     },
