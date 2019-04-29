@@ -7,7 +7,9 @@ const State = {
   init() {
 
     const proxyAddress = window.location.hostname;
-    const port = 9001;
+    const port = window.location.port !== "" ?
+      parseInt(window.location.port, 10) :
+      80;
     
     createHoster({ proxyAddress, port, secure: false }).then((hoster) => {
       State.hoster = hoster;
